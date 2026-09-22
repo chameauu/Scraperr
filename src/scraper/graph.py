@@ -15,14 +15,23 @@ from .validate import validate
 decide_fn = Callable[[GraphState], Awaitable[Action]]
 
 
-def build_graph(browser: BrowserAdapter, decide: decide_fn, model: ModelClient | None = None):
+def build_graph(
+    browser: BrowserAdapter,
+    decide: decide_fn | None,
+    model: ModelClient | None = None,
+):
     builder = StateGraph(GraphState)
 
     async def observe_node(state: GraphState):
         return await observe(browser, state)
 
     async def decide_node(state: GraphState):
-        action = await decide(state)
+        if decide is not None:
+            action = await decide(state)
+        elif model is not None:
+            action = await model.decide_action(state)
+        else:
+            raise ValueError("decide or model must be provided")
         return {
             "last_action": action.model_dump(),
             "actions": state["actions"] + [action.model_dump()],
@@ -36,7 +45,7 @@ def build_graph(browser: BrowserAdapter, decide: decide_fn, model: ModelClient |
 
     async def execute_node(state: GraphState):
         action = Action.model_validate(state["last_action"])
-        return await execute_action(browser, state, action)
+        return await execute_action(browser, state, action, model=model)
 
     def validate_node(state: GraphState):
         return validate(state)
