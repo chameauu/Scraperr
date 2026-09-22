@@ -23,8 +23,36 @@ async def execute_action(
             return {
                 "results": state["results"] + validated,
                 "last_error": None,
+                "history": state["history"]
+                + [
+                    {
+                        "action": action.model_dump(),
+                        "status": "ok",
+                        "error": None,
+                    }
+                ],
             }
         await browser.perform(action)
-        return {"last_error": None}
+        return {
+            "last_error": None,
+            "history": state["history"]
+            + [
+                {
+                    "action": action.model_dump(),
+                    "status": "ok",
+                    "error": None,
+                }
+            ],
+        }
     except (ValidationError, Exception) as error:  # noqa: BLE001
-        return {"last_error": str(error)}
+        return {
+            "last_error": str(error),
+            "history": state["history"]
+            + [
+                {
+                    "action": action.model_dump(),
+                    "status": "error",
+                    "error": str(error),
+                }
+            ],
+        }
