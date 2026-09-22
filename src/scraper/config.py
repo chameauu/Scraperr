@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -10,9 +10,8 @@ class Settings:
     max_steps: int = 20
     max_retries: int = 2
 
-
     @staticmethod
-    def from_env() -> "Settings":
+    def from_env() -> Settings:
         return Settings(
             cdp_url=os.getenv("LIGHTPANDA_CDP_URL", ""),
             max_steps=int(os.getenv("SCRAPER_MAX_STEPS", "20")),

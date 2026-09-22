@@ -22,6 +22,20 @@ cd docs/scraper
 uv sync --dev
 ```
 
+## Pre-commit hooks
+
+Install the git hook to run checks before every commit:
+
+```bash
+uv run pre-commit install
+```
+
+Or run the helper script:
+
+```bash
+./scripts/install-hooks.sh
+```
+
 ## Run tests
 
 ```bash

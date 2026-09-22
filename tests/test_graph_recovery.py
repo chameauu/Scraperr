@@ -16,7 +16,6 @@ class FlakyBrowser:
         self.calls += 1
         if self.calls == 1:
             raise RuntimeError("click failed")
-        return None
 
 
 @pytest.mark.asyncio

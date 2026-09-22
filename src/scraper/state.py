@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-from typing import Any, List, Optional
 from typing_extensions import TypedDict
 
 
 class GraphState(TypedDict):
     task: str
-    schema: Optional[dict]
+    schema: dict | None
     step: int
     max_steps: int
     retries: int
     max_retries: int
-    observations: List[str]
-    actions: List[dict]
-    results: List[dict]
-    last_action: Optional[dict]
-    last_error: Optional[str]
+    observations: list[str]
+    actions: list[dict]
+    results: list[dict]
+    last_action: dict | None
+    last_error: str | None
     status: str  # running | completed | failed
 
 

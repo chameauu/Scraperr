@@ -15,6 +15,7 @@ dev = [
   "pytest",
   "pytest-asyncio",
   "ruff",
+  "pre-commit",
 ]
 
 [build-system]

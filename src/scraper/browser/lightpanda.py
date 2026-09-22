@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from playwright.async_api import async_playwright
+
 from ..actions import Action
 from . import BrowserAdapter
 

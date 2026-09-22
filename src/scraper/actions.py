@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Literal, Optional
-from pydantic import BaseModel
+from typing import Literal
 
+from pydantic import BaseModel
 
 ActionType = Literal[
     "search",
@@ -19,6 +19,6 @@ ActionType = Literal[
 
 class Action(BaseModel):
     type: ActionType
-    target: Optional[str] = None
-    value: Optional[str] = None
-    reason: Optional[str] = None
+    target: str | None = None
+    value: str | None = None
+    reason: str | None = None

@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from typing import Awaitable, Callable
+from collections.abc import Awaitable, Callable
 
 from langgraph.graph import END, START, StateGraph
+
 from .actions import Action
 from .browser import BrowserAdapter
 from .execute import execute_action
+from .model import ModelClient
 from .observe import observe
 from .state import GraphState
 from .validate import validate
-from .model import ModelClient
-
 
 decide_fn = Callable[[GraphState], Awaitable[Action]]
 
