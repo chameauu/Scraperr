@@ -16,6 +16,7 @@ class GraphState(TypedDict):
     results: list[dict]
     last_action: dict | None
     last_error: str | None
+    stop_reason: str | None
     status: str  # running | completed | failed
 
 
@@ -33,5 +34,6 @@ def initial_state(task: str, max_steps: int = 20, max_retries: int = 2) -> Graph
         "results": [],
         "last_action": None,
         "last_error": None,
+        "stop_reason": None,
         "status": "running",
     }

@@ -34,6 +34,8 @@ async def test_history_records_successful_action():
 
     assert updates["history"][-1]["status"] == "ok"
     assert updates["history"][-1]["action"]["type"] == "click"
+    assert "ts" in updates["history"][-1]
+    assert updates["history"][-1]["duration_ms"] >= 0
 
 
 @pytest.mark.asyncio
@@ -69,6 +71,8 @@ async def test_history_records_extract_action():
 
     assert updates["history"][-1]["status"] == "ok"
     assert updates["history"][-1]["action"]["type"] == "extract"
+    assert "ts" in updates["history"][-1]
+    assert updates["history"][-1]["duration_ms"] >= 0
 
 
 @pytest.mark.asyncio
@@ -80,3 +84,5 @@ async def test_history_records_error_action():
 
     assert updates["history"][-1]["status"] == "error"
     assert updates["history"][-1]["error"] == "boom"
+    assert "ts" in updates["history"][-1]
+    assert updates["history"][-1]["duration_ms"] >= 0
