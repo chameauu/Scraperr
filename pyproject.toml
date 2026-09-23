@@ -9,6 +9,7 @@ dependencies = [
   "httpx",
   "pydantic",
   "playwright",
+  "beautifulsoup4",
 ]
 
 [dependency-groups]
