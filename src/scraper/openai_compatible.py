@@ -16,11 +16,14 @@ class OpenAICompatibleModel:
         api_key: str,
         model: str,
         transport: httpx.AsyncBaseTransport | None = None,
+        timeout: float = 30,
     ) -> None:
         self._base_url = base_url.rstrip("/")
         self._api_key = api_key
         self._model = model
         self._transport = transport
+        self._timeout = timeout
+        self._client = httpx.AsyncClient(transport=self._transport, timeout=self._timeout)
 
     async def decide_action(self, state: GraphState) -> Action:
         prompt = {
@@ -75,11 +78,13 @@ class OpenAICompatibleModel:
                 {"role": "user", "content": user},
             ],
         }
-        async with httpx.AsyncClient(transport=self._transport, timeout=30) as client:
-            resp = await client.post(
-                f"{self._base_url}/chat/completions", json=payload, headers=headers
-            )
-            resp.raise_for_status()
-            data = resp.json()
+        resp = await self._client.post(
+            f"{self._base_url}/chat/completions", json=payload, headers=headers
+        )
+        resp.raise_for_status()
+        data = resp.json()
         content = data["choices"][0]["message"]["content"]
         return json.loads(content)
+
+    async def aclose(self) -> None:
+        await self._client.aclose()

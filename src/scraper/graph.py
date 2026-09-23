@@ -19,6 +19,7 @@ def build_graph(
     browser: BrowserAdapter,
     decide: decide_fn | None,
     model: ModelClient | None = None,
+    search_client=None,
 ):
     builder = StateGraph(GraphState)
 
@@ -45,7 +46,9 @@ def build_graph(
 
     async def execute_node(state: GraphState):
         action = Action.model_validate(state["last_action"])
-        return await execute_action(browser, state, action, model=model)
+        return await execute_action(
+            browser, state, action, model=model, search_client=search_client
+        )
 
     def validate_node(state: GraphState):
         return validate(state)

@@ -11,9 +11,11 @@ class GraphState(TypedDict):
     retries: int
     max_retries: int
     observations: list[str]
+    observation_history: list[dict]
     actions: list[dict]
     history: list[dict]
     results: list[dict]
+    search_results: list[dict]
     last_action: dict | None
     last_error: str | None
     stop_reason: str | None
@@ -29,9 +31,11 @@ def initial_state(task: str, max_steps: int = 20, max_retries: int = 2) -> Graph
         "retries": 0,
         "max_retries": max_retries,
         "observations": [],
+        "observation_history": [],
         "actions": [],
         "history": [],
         "results": [],
+        "search_results": [],
         "last_action": None,
         "last_error": None,
         "stop_reason": None,
