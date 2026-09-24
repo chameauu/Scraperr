@@ -5,6 +5,8 @@ from .state import GraphState
 
 def validate(state: GraphState) -> dict:
     if state["last_action"] and state["last_action"].get("type") == "finish":
+        if not state["results"]:
+            return {"status": "failed", "stop_reason": "empty_results"}
         return {"status": "completed"}
 
     if state["last_error"]:

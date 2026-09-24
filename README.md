@@ -42,6 +42,12 @@ Or run the helper script:
 uv run pytest
 ```
 
+## Run a minimal example
+
+```bash
+uv run python examples/run_fake.py
+```
+
 ## Environment
 
 - `LIGHTPANDA_CDP_URL`: CDP endpoint for Lightpanda (used by the adapter when implemented)
