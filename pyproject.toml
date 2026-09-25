@@ -10,6 +10,7 @@ dependencies = [
   "pydantic",
   "playwright",
   "beautifulsoup4",
+  "python-dotenv",
 ]
 
 [dependency-groups]

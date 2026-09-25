@@ -30,9 +30,13 @@ def build_compact_observation(html: str, *, max_text: int = 2000) -> CompactObse
     title = soup.title.string.strip() if soup.title and soup.title.string else None
 
     links = _unique([a.get_text(strip=True) for a in soup.find_all("a")])
-    buttons = _unique(
-        [b.get_text(strip=True) for b in soup.find_all(["button", "input"], type="button")]
-    )
+    button_labels = [b.get_text(strip=True) for b in soup.find_all("button")]
+    input_buttons = [
+        (i.get("value") or "").strip()
+        for i in soup.find_all("input")
+        if (i.get("type") or "").lower() in {"button", "submit"}
+    ]
+    buttons = _unique(button_labels + input_buttons)
     inputs = _unique(
         [i.get("name") or i.get("id") or "" for i in soup.find_all(["input", "textarea", "select"])]
     )

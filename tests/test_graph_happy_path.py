@@ -18,10 +18,14 @@ async def test_graph_happy_path_finishes():
     browser = FakeBrowser()
 
     async def decide(_state):
+        if not _state["results"]:
+            return Action(type="extract")
         return Action(type="finish", reason="done")
 
-    graph = build_graph(browser, decide)
-    result = await graph.ainvoke(initial_state("collect data"))
+    graph = build_graph(browser, decide, model=None)
+    state = initial_state("collect data")
+    state["results"] = [{"title": "A"}]
+    result = await graph.ainvoke(state)
 
     assert result["status"] == "completed"
     assert result["actions"][-1]["type"] == "finish"

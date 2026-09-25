@@ -1,6 +1,8 @@
 __all__ = [
     "Action",
     "ActionType",
+    "AzureOpenAIModel",
+    "FoundryResponsesModel",
     "GraphState",
     "ModelClient",
     "OpenAICompatibleModel",
@@ -10,6 +12,8 @@ __all__ = [
 ]
 
 from .actions import Action, ActionType
+from .azure_openai import AzureOpenAIModel
+from .foundry_responses import FoundryResponsesModel
 from .graph import build_graph
 from .model import ModelClient
 from .openai_compatible import OpenAICompatibleModel

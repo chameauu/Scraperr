@@ -25,10 +25,13 @@ async def test_graph_recovers_after_failure():
     async def decide(state):
         if state["retries"] == 0:
             return Action(type="click", target="#next")
+        state["results"] = [{"title": "A"}]
         return Action(type="finish")
 
     graph = build_graph(browser, decide)
-    result = await graph.ainvoke(initial_state("collect data", max_retries=2))
+    state = initial_state("collect data", max_retries=2)
+    state["results"] = [{"title": "A"}]
+    result = await graph.ainvoke(state)
 
     assert result["status"] == "completed"
     assert result["retries"] == 1

@@ -48,6 +48,38 @@ uv run pytest
 uv run python examples/run_fake.py
 ```
 
-## Environment
+## Run with Azure OpenAI
 
+1. Copy the env template and fill in values:
+
+```bash
+cp .env.example .env
+```
+
+2. Run the Azure example:
+
+```bash
+uv run python examples/run_azure.py
+```
+
+The example loads `.env` automatically using `python-dotenv`.
+
+## Run with Foundry Responses
+
+1. Add Foundry variables to `.env`:
+
+```
+FOUNDRY_ENDPOINT=https://<your-foundry-endpoint>
+FOUNDRY_API_KEY=...
+FOUNDRY_MODEL=<deployment-name>
+```
+
+2. Run the Foundry example:
+
+```bash
+uv run python examples/run_foundry.py
+```
+
+## Environment
+ (Optional) Start a local SearxNG instance for search actions using `docker compose up -d`.
 - `LIGHTPANDA_CDP_URL`: CDP endpoint for Lightpanda (used by the adapter when implemented)

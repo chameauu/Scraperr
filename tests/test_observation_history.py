@@ -14,7 +14,7 @@ async def test_observation_history_records_snapshot():
     state = initial_state("collect data")
     updates = await observe(FakeBrowser(), state)
 
-    assert updates["observations"][-1] == "<html>snapshot</html>"
+    assert updates["observations"][-1] == "snapshot"
     assert updates["observation_history"][-1]["snapshot"] == "<html>snapshot</html>"
     assert "ts" in updates["observation_history"][-1]
     assert "compact" in updates["observation_history"][-1]

@@ -11,5 +11,4 @@ htmlcov/
 .build/
 .DS_Store
 .env
-.env.*
 uv.lock
