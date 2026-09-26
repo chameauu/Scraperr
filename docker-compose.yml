@@ -16,3 +16,32 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+  lightpanda:
+    image: lightpanda/browser:0.4.1
+    container_name: lightpanda-test
+    ports:
+      - "127.0.0.1:9222:9222"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    command:
+      - /bin/lightpanda
+      - serve
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "9222"
+      - --timeout
+      - "3600"
+      - --log-level
+      - info
+      - --http-timeout
+      - "30000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9222/json/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

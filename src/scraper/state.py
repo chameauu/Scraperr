@@ -5,6 +5,7 @@ from typing_extensions import TypedDict
 
 class GraphState(TypedDict):
     task: str
+    start_url: str | None
     schema: dict | None
     step: int
     max_steps: int
@@ -22,9 +23,15 @@ class GraphState(TypedDict):
     status: str  # running | completed | failed
 
 
-def initial_state(task: str, max_steps: int = 20, max_retries: int = 2) -> GraphState:
+def initial_state(
+    task: str,
+    max_steps: int = 20,
+    max_retries: int = 2,
+    start_url: str | None = None,
+) -> GraphState:
     return {
         "task": task,
+        "start_url": start_url,
         "schema": None,
         "step": 0,
         "max_steps": max_steps,

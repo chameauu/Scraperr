@@ -16,6 +16,8 @@ async def agent_runtime(
     search_client: SearxNGClient | None = None,
 ) -> AsyncIterator[None]:
     try:
+        if hasattr(browser, "connect"):
+            await browser.connect()
         yield
     finally:
         if search_client is not None:

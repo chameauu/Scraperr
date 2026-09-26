@@ -56,13 +56,28 @@ def build_graph(
     def route_after_validate(state: GraphState):
         return "end" if state["status"] in {"completed", "failed"} else "observe"
 
+    async def start_node(state: GraphState):
+        if state.get("start_url"):
+            action = Action(type="navigate", target=state["start_url"])
+            updates = await execute_action(
+                browser, state, action, model=model, search_client=search_client
+            )
+            return {
+                **updates,
+                "last_action": action.model_dump(),
+                "actions": state["actions"] + [action.model_dump()],
+            }
+        return {}
+
+    builder.add_node("start", start_node)
     builder.add_node("observe", observe_node)
     builder.add_node("schema", schema_node)
     builder.add_node("decide", decide_node)
     builder.add_node("execute", execute_node)
     builder.add_node("validate", validate_node)
 
-    builder.add_edge(START, "observe")
+    builder.add_edge(START, "start")
+    builder.add_edge("start", "observe")
     builder.add_edge("observe", "schema")
     builder.add_edge("schema", "decide")
     builder.add_edge("decide", "execute")
