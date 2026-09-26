@@ -9,24 +9,26 @@ class FakeBrowser:
     async def snapshot(self) -> str:
         return "<html>ok</html>"
 
-    async def perform(self, action: Action) -> None:
+    async def perform(self, _action: Action) -> None:
         return None
 
 
 @pytest.mark.asyncio
-async def test_graph_happy_path_finishes():
-    browser = FakeBrowser()
+async def test_progress_emits_before_observe():
+    events: list[dict] = []
 
     async def decide(_state):
-        if not _state["results"]:
-            return Action(type="extract")
         return Action(type="finish", reason="done")
 
-    graph = build_graph(browser, decide, model=None)
+    async def progress(event: dict) -> None:
+        events.append(event)
+
+    graph = build_graph(FakeBrowser(), decide, model=None, progress=progress)
     state = initial_state("collect data")
     state["results"] = [{"title": "A"}]
     state["schema"] = {"type": "object"}
-    result = await graph.ainvoke(state)
 
-    assert result["status"] == "completed"
-    assert result["actions"][-1]["type"] == "finish"
+    await graph.ainvoke(state)
+
+    kinds = [event.get("kind") for event in events]
+    assert "pre_observe" in kinds

@@ -5,6 +5,7 @@ from scraper.validate import validate
 def test_finish_fails_on_empty_results():
     state = initial_state("collect data")
     state["last_action"] = {"type": "finish"}
+    state["schema"] = {"type": "object"}
 
     updates = validate(state)
 
@@ -16,6 +17,7 @@ def test_finish_succeeds_with_results():
     state = initial_state("collect data")
     state["last_action"] = {"type": "finish"}
     state["results"] = [{"title": "A"}]
+    state["schema"] = {"type": "object"}
 
     updates = validate(state)
 

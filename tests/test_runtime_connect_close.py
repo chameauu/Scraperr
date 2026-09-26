@@ -18,7 +18,7 @@ class BrowserSpy:
 async def test_agent_runtime_connects_and_closes_browser():
     browser = BrowserSpy()
 
-    async with agent_runtime(browser=browser):
+    async with agent_runtime(browser=browser, progress=None):
         assert browser.calls == ["connect"]
 
     assert browser.calls == ["connect", "close"]

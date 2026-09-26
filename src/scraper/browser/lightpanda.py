@@ -7,8 +7,9 @@ from . import BrowserAdapter
 
 
 class LightpandaBrowser(BrowserAdapter):
-    def __init__(self, cdp_url: str) -> None:
+    def __init__(self, cdp_url: str, *, navigation_timeout_ms: int = 30000) -> None:
         self._cdp_url = cdp_url
+        self._navigation_timeout_ms = navigation_timeout_ms
         self._playwright = None
         self._browser = None
         self._page = None
@@ -27,16 +28,21 @@ class LightpandaBrowser(BrowserAdapter):
         if self._playwright is not None:
             await self._playwright.stop()
 
-    async def snapshot(self) -> str:
+    async def snapshot(self, *, timeout_ms: int | None = None) -> str:
         if self._page is None:
             raise RuntimeError("Browser not connected")
-        return await self._page.content()
+        timeout = timeout_ms if timeout_ms is not None else self._navigation_timeout_ms
+        try:
+            return await self._page.content()
+        except TimeoutError:
+            await self._page.wait_for_load_state("domcontentloaded", timeout=timeout)
+            return await self._page.content()
 
     async def perform(self, action: Action) -> None:
         if self._page is None:
             raise RuntimeError("Browser not connected")
         if action.type == "navigate" and action.target:
-            await self._page.goto(action.target)
+            await self._page.goto(action.target, timeout=self._navigation_timeout_ms)
             return
         if action.type == "click" and action.target:
             await self._page.locator(action.target).click()

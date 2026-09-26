@@ -31,6 +31,7 @@ async def test_graph_recovers_after_failure():
     graph = build_graph(browser, decide)
     state = initial_state("collect data", max_retries=2)
     state["results"] = [{"title": "A"}]
+    state["schema"] = {"type": "object"}
     result = await graph.ainvoke(state)
 
     assert result["status"] == "completed"

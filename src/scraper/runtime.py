@@ -14,10 +14,15 @@ async def agent_runtime(
     browser: BrowserAdapter,
     model: ModelClient | None = None,
     search_client: SearxNGClient | None = None,
+    progress=None,
 ) -> AsyncIterator[None]:
     try:
         if hasattr(browser, "connect"):
+            if progress is not None:
+                await progress({"kind": "runtime_connect_start"})
             await browser.connect()
+            if progress is not None:
+                await progress({"kind": "runtime_connect_done"})
         yield
     finally:
         if search_client is not None:
@@ -25,4 +30,8 @@ async def agent_runtime(
         if model is not None and hasattr(model, "aclose"):
             await model.aclose()
         if hasattr(browser, "close"):
+            if progress is not None:
+                await progress({"kind": "runtime_close_start"})
             await browser.close()
+            if progress is not None:
+                await progress({"kind": "runtime_close_done"})

@@ -80,6 +80,34 @@ FOUNDRY_MODEL=<deployment-name>
 uv run python examples/run_foundry.py
 ```
 
+## Run with Lightpanda + SearxNG
+
+1. Set env vars in `.env`:
+
+```
+LIGHTPANDA_CDP_URL=http://localhost:9222
+SEARXNG_BASE_URL=http://localhost:8888
+SCRAPER_TASK=get latest 10 hackernews articles
+```
+
+2. Run the Lightpanda example:
+
+```bash
+uv run python examples/run_lightpanda.py
+```
+
+You can also pass optional CLI args:
+
+```bash
+uv run python examples/run_lightpanda.py --task "get latest 10 hackernews articles" --start-url "https://news.ycombinator.com/"
+```
+
+Add `--verbose` to print progress events:
+
+```bash
+uv run python examples/run_lightpanda.py --verbose
+```
+
 ## Environment
  (Optional) Start a local SearxNG instance for search actions using `docker compose up -d`.
 - `LIGHTPANDA_CDP_URL`: CDP endpoint for Lightpanda (used by the adapter when implemented)

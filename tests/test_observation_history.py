@@ -17,4 +17,8 @@ async def test_observation_history_records_snapshot():
     assert updates["observations"][-1] == "snapshot"
     assert updates["observation_history"][-1]["snapshot"] == "<html>snapshot</html>"
     assert "ts" in updates["observation_history"][-1]
+    compact = updates["observation_history"][-1]["compact"]
     assert "compact" in updates["observation_history"][-1]
+    assert "links" in compact
+    assert "buttons" in compact
+    assert "inputs" in compact
